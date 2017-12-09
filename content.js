@@ -1,14 +1,26 @@
-// content.js
-chrome.runtime.onMessage.addListener(
-  function(request, sender, sendResponse) {
+console.log("I am popup.js");
+get_current_state();
 
-    if( request.message === "clicked_browser_action" ) {
-      var firstHref = $("a[href^='http']").eq(0).attr("href");
+document.getElementById("btn").onclick = function(e){
+    switch_play_pause();
+}
 
-      console.log(firstHref);
+function switch_play_pause() {
+    console.log("switch_play_pause");
+    chrome.runtime.sendMessage({
+            greeting: "play/pause"
+        },
+        function(response) {
+            document.getElementById("div").textContent = response.msg;
+        });
+}
 
-      // This line is new!
-      chrome.runtime.sendMessage({"message": "open_new_tab", "url": firstHref});
-    }
-  }
-);
+function get_current_state() {
+    console.log("get current state");
+    chrome.runtime.sendMessage({
+            greeting: "current_state"
+        },
+        function(response) {
+            document.getElementById("div").textContent = response.msg;
+        });
+}
