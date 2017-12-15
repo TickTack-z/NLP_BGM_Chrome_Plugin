@@ -6,7 +6,6 @@ chrome.tabs.onHighlighted.addListener(function(tabId, changeInfo, tab){
         audio.setAttribute("id","mp3");
         audio.src = getAudioUrl();
         document.body.appendChild(audio);
-        audio.play();
     } else {}//change audio
 });
 
@@ -18,7 +17,6 @@ chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
             audio.setAttribute("id","mp3");
             audio.src = getAudioUrl();
             document.body.appendChild(audio);
-            audio.play();
         } else {}//change audio
     }
 });
@@ -28,11 +26,19 @@ function getAudioUrl(){
     return 'https://s3.amazonaws.com/12312331231231231232/Ib%E6%81%90%E6%80%96%E7%BE%8E%E6%9C%AF%E9%A6%86+-+Bad+Apple.mp3';
 }
 
-console.log("I am background.js");
 
 chrome.runtime.onMessage.addListener(
     function(request, sender, sendResponse) {
         if (request.greeting == "play/pause") {
+            //check exist mp3 element
+            var myElem = document.getElementById('mp3');
+            if (myElem === null) {
+                var audio = document.createElement('audio');
+                audio.setAttribute("id", "mp3");
+                audio.src = getAudioUrl();
+                document.body.appendChild(audio);
+            }
+
             //switch play/pause
             //return switched state
             var myElem = document.getElementById('mp3');
@@ -70,3 +76,5 @@ chrome.runtime.onMessage.addListener(
             });
         }
     });
+
+

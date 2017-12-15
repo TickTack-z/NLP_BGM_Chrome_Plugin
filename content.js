@@ -1,26 +1,117 @@
-console.log("I am popup.js");
-get_current_state();
 
-document.getElementById("btn").onclick = function(e){
-    switch_play_pause();
-}
+window.onload = function(){
+//rain
+    var c = document.getElementById("c");
+    var ctx = c.getContext("2d");
 
-function switch_play_pause() {
-    console.log("switch_play_pause");
-    chrome.runtime.sendMessage({
-            greeting: "play/pause"
-        },
-        function(response) {
-            document.getElementById("div").textContent = response.msg;
-        });
-}
+//making the canvas full screen
+    c.height = window.innerHeight;
+    c.width = window.innerWidth;
 
-function get_current_state() {
-    console.log("get current state");
+//chinese characters - taken from the unicode charset
+    var chinese = "富强民主文明和谐自由平等公正法治爱国敬业诚信友善"//"田由甲申甴电甶男甸甹町画甼甽甾甿畀畁畂畃畄畅畆畇畈畉畊畋界畍畎畏畐畑";
+//converting the string into an array of single characters
+    chinese = chinese.split("");
+
+    var font_size = 10;
+    var columns = c.width/font_size; //number of columns for the rain
+//an array of drops - one per column
+    var drops = [];
+//x below is the x coordinate
+//1 = y co-ordinate of the drop(same for every drop initially)
+    for(var x = 0; x < columns; x++)
+        drops[x] = 1;
+
+
+//drawing the characters
+    function draw()
+    {
+        //Black BG for the canvas
+        //translucent BG to show trail
+        ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
+        ctx.fillRect(0, 0, c.width, c.height);
+
+        ctx.fillStyle = "#0F0"; //green text
+        ctx.font = font_size + "px arial";
+        //looping over drops
+        for(var i = 0; i < drops.length; i++)
+        {
+            //a random chinese character to print
+            var text = chinese[Math.floor(Math.random()*chinese.length)];
+            //x = i*font_size, y = value of drops[i]*font_size
+            ctx.fillText(text, i*font_size, drops[i]*font_size);
+
+            //sending the drop back to the top randomly after it has crossed the screen
+            //adding a randomness to the reset to make the drops scattered on the Y axis
+            if(drops[i]*font_size > c.height && Math.random() > 0.975)
+                drops[i] = 0;
+
+            //incrementing Y coordinate
+            drops[i]++;
+        }
+    }
+
+
     chrome.runtime.sendMessage({
             greeting: "current_state"
         },
         function(response) {
             document.getElementById("div").textContent = response.msg;
+            if (response.msg == "paused"){
+                var element = document.getElementById("btn");
+                element.style.backgroundImage= 'url("pic/play.jpg")';
+            } else{
+                var element = document.getElementById("btn");
+                element.style.backgroundImage= 'url("pic/pause.jpg")';
+                setDraw = setInterval(draw,33);
+            }
         });
-}
+
+
+    // your code
+    get_current_state();
+    document.getElementById("btn").onclick = function(){
+        switch_play_pause();
+    }
+
+
+    function switch_play_pause() {
+        console.log("switch_play_pause");
+        chrome.runtime.sendMessage({
+                greeting: "play/pause"
+            },
+            function(response) {
+                document.getElementById("div").textContent = response.msg;
+                if (response.msg == "paused"){
+                    clearInterval(setDraw);
+                    var element = document.getElementById("btn");
+                    element.style.backgroundImage= 'url("pic/play.jpg")';
+                } else{
+                    setDraw = setInterval(draw,33);
+                    var element = document.getElementById("btn");
+                    element.style.backgroundImage= 'url("pic/pause.jpg")';
+                }
+            });
+    }
+
+    function get_current_state() {
+        console.log("get current state");
+        chrome.runtime.sendMessage({
+                greeting: "current_state"
+            },
+            function(response) {
+                document.getElementById("div").textContent = response.msg;
+                if (response.msg == "paused"){
+                    var element = document.getElementById("btn");
+                    element.style.backgroundImage= 'url("pic/play.jpg")';
+                } else{
+                    var element = document.getElementById("btn");
+                    element.style.backgroundImage= 'url("pic/pause.jpg")';
+                }
+            });
+    }
+
+
+
+};
+
