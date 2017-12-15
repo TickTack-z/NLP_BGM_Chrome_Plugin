@@ -44,6 +44,11 @@ chrome.runtime.onMessage.addListener(
             var myElem = document.getElementById('mp3');
             var mess_response;
             if (myElem === null) {
+                var audio = document.createElement('audio');
+                audio.setAttribute("id","mp3");
+                audio.src = getAudioUrl();
+                document.body.appendChild(audio);
+                mess_response='paused';
             } else{
                 if (myElem.paused){
                     myElem.play();
@@ -63,6 +68,11 @@ chrome.runtime.onMessage.addListener(
             var myElem = document.getElementById('mp3');
             var mess_response;
             if (myElem === null) {
+                var audio = document.createElement('audio');
+                audio.setAttribute("id","mp3");
+                audio.src = getAudioUrl();
+                document.body.appendChild(audio);
+                mess_response='paused';
             } else{
                 if (myElem.paused){
                     mess_response='paused';

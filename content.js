@@ -9,7 +9,7 @@ window.onload = function(){
     c.width = window.innerWidth;
 
 //chinese characters - taken from the unicode charset
-    var chinese = "富强民主文明和谐自由平等公正法治爱国敬业诚信友善"//"田由甲申甴电甶男甸甹町画甼甽甾甿畀畁畂畃畄畅畆畇畈畉畊畋界畍畎畏畐畑";
+    var chinese = "富强民主文明和谐自由平等公正法治爱国敬业诚信友善";//"田由甲申甴电甶男甸甹町画甼甽甾甿畀畁畂畃畄畅畆畇畈畉畊畋界畍畎畏畐畑";
 //converting the string into an array of single characters
     chinese = chinese.split("");
 
