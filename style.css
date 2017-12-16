@@ -6,6 +6,7 @@
 iframe { display: none; }
 body{
     background: #d2d5d6;
+    background-image: url("pic/background.png");
     font-family: 'Sintony', sans-serif;
     font-size: 16px;
     width:280px;
@@ -27,7 +28,7 @@ body{
 }
 .art {
     overflow: hidden;
-    height: 52%;
+    height: 70%;
     width: 100%;
 
     background: #DDD;
@@ -36,7 +37,7 @@ body{
 }
 .info {
     height: 0;
-    margin-top: 15%;
+    margin-top: 5%;
     padding: 0 10%;
 }
 .info .title {
@@ -69,7 +70,7 @@ body{
 }
 .controls {
     position: relative;
-    margin: 18% 0 6.5% 0;
+    margin: 10% 0 6.5% 0;
     padding: 0 10%;
 }
 .controls button {
@@ -110,11 +111,16 @@ body{
 }
 .controls .backward {
     left: 28%;
+    background-image: url("pic/h_wangyi.png");
+    background-image: url("pic/heart_liked.png");
+    background-size:100%;
 }
 .controls .forward {
     left: 42%;
     letter-spacing: .3em;
     text-align: right;
+    background-image: url("pic/next.jpg");
+    background-size:100%;
 }
 
 .controls .settings {

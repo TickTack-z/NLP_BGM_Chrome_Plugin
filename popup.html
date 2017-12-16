@@ -12,7 +12,7 @@
 </head>
 <body>
 <center>
-    <p><input class="uibutton large confirm" type="submit" value="Continue with Facebook"></p>
+    <a target="_blank" href="https://www.facebook.com/dialog/oauth?client_id=232347260637084 &response_type=token&scope=email&redirect_uri=http://www.facebook.com/connect/login_success.html" class="uibutton large confirm" id="fblogin">Continue with Facebook</a>
 </center>
 
 <div class='player'>
@@ -21,14 +21,12 @@
 
     </div>
     <div class='info'>
-        <div class='title'></div>
-        <div class='song'></div>
-        current state: <div id="div"></div>
+        <div class='title' id="div">current state:</div>
     </div>
     <div class='controls'>
         <button id="btn" class='play glyphicon glyphicon-play' ></button>
-        <button class='backward glyphicon glyphicon glyphicon-backward'></button>
-        <button class='forward glyphicon glyphicon-forward'></button>
+        <button class='forward glyphicon glyphicon glyphicon-backward'></button>
+        <button class='backward glyphicon glyphicon-forward'></button>
         <div class="settings glyphicon glyphicon-cog"></div>
     </div>
 </div>

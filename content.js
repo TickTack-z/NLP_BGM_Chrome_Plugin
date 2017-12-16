@@ -1,5 +1,26 @@
+function displayUser(user) {
+    if (user.name){
+        console.log(user);
+        document.getElementById("fblogin").innerHTML= "Welcome, " + user.name;
+    }else{
+        delete localStorage.accessToken ;
+    }
+}
 
 window.onload = function(){
+
+    //fb token
+    if (localStorage.accessToken) {
+        var graphUrl = "https://graph.facebook.com/me?" + localStorage.accessToken + "&callback=displayUser";
+        console.log(graphUrl);
+
+        var script = document.createElement("script");
+        script.src = graphUrl;
+        document.body.appendChild(script);
+    }
+    //end of facebook token
+
+
 //rain
     var c = document.getElementById("c");
     var ctx = c.getContext("2d");
@@ -60,7 +81,7 @@ window.onload = function(){
             if (response.msg == "paused"){
                 var element = document.getElementById("btn");
                 element.style.backgroundImage= 'url("pic/play.jpg")';
-            } else{
+            } else if (response.msg == "playing"){
                 var element = document.getElementById("btn");
                 element.style.backgroundImage= 'url("pic/pause.jpg")';
                 setDraw = setInterval(draw,33);
@@ -86,7 +107,7 @@ window.onload = function(){
                     clearInterval(setDraw);
                     var element = document.getElementById("btn");
                     element.style.backgroundImage= 'url("pic/play.jpg")';
-                } else{
+                } else if (response.msg == "playing"){
                     setDraw = setInterval(draw,33);
                     var element = document.getElementById("btn");
                     element.style.backgroundImage= 'url("pic/pause.jpg")';
