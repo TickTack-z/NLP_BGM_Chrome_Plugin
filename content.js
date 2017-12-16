@@ -2,6 +2,7 @@ function displayUser(user) {
     if (user.name){
         console.log(user);
         document.getElementById("fblogin").innerHTML= "Welcome, " + user.name;
+        localStorage.userId = user.id;
     }else{
         delete localStorage.accessToken ;
     }
@@ -96,6 +97,36 @@ window.onload = function(){
         switch_play_pause();
     }
 
+
+    //click like button
+    document.getElementById("like").onclick = function(){
+        var element = document.getElementById("like");
+        if (localStorage.userId){
+            chrome.storage.sync.get("mp3",function (item) {
+                if (localStorage.getItem(item.mp3) != null){
+                    element.style.backgroundImage = 'url("pic/h_wangyi.png")';
+                    delete localStorage.removeItem(item.mp3)
+                }
+                else{
+                    localStorage.setItem(item.mp3,1);
+                    element.style.backgroundImage = 'url("pic/heart_liked.png")';
+                }
+            });
+            /*
+        if (element.style.backgroundImage == 'url("pic/heart_liked.png")'){
+            element.style.backgroundImage = 'url("pic/h_wangyi.png")';
+        }
+        else {
+            element.style.backgroundImage = 'url("pic/heart_liked.png")';
+        }*/
+        }
+        else{
+            alert("please log in your facebook account first");
+        }
+    }
+
+
+
     //click next
     document.getElementById("next").onclick = function(){
         chrome.runtime.sendMessage({
@@ -109,7 +140,22 @@ window.onload = function(){
             else if (response.msg == "paused"){
                 switch_play_pause();
             }
-        })
+
+            /*
+            if (localStorage.userId) {
+                chrome.storage.sync.get("mp3", function (item) {
+                    element = document.getElementById("like");
+                    if (localStorage.getItem(item.mp3) != null) {
+                        element.style.backgroundImage = 'url("pic/heart_liked.png")';
+                    }
+                    else {
+                        element.style.backgroundImage = 'url("pic/h_wangyi.png")';
+                    }
+                });
+            }
+            */
+        }
+        )
     }
 
 
@@ -119,7 +165,6 @@ window.onload = function(){
                 greeting: "play/pause"
             },
             function(response) {
-                document.getElementById("div").textContent = response.msg;
                 if (response.msg == "paused"){
                     document.getElementById("div").textContent = "paused";
                     clearInterval(setDraw);
@@ -164,6 +209,14 @@ window.onload = function(){
         if ("mp3" in changes)
         {
             document.getElementById("div").innerHTML=changes["mp3"].newValue;
+            var temp=changes["mp3"].newValue;
+                element = document.getElementById("like");
+                if (localStorage.getItem(temp) != null) {
+                    element.style.backgroundImage = 'url("pic/heart_liked.png")';
+                }
+                else {
+                    element.style.backgroundImage = 'url("pic/h_wangyi.png")';
+                }
         }
 
         for (key in changes) {

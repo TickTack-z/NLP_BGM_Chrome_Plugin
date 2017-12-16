@@ -10,9 +10,6 @@ window.onload = function(){
         // Notify that we saved.
     });
 
-
-
-
 function onFacebookLogin() {
     if (!localStorage.accessToken) {
         chrome.tabs.getAllInWindow(null, function(tabs) {
@@ -43,19 +40,18 @@ chrome.tabs.onHighlighted.addListener(function(){
 )}
 );
 
-/*
 chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
     if (changeInfo.status == 'complete') {
-        var myElem = document.getElementById('mp3');
-        if (myElem === null) {
-            var audio = document.createElement('audio');
-            audio.setAttribute("id","mp3");
-            audio.src = getAudioUrl();
-            document.body.appendChild(audio);
-        } else {}//change audio
+        chrome.tabs.query({currentWindow: true, active: true}, function(tabs){
+                var myElem = document.getElementById('mp3');
+                if (myElem.paused) {
+                } else{
+                    getAudioUrl(tabs[0].url, new_music);
+                }
+            }
+        )
     }
 });
-*/
 
 
 function getAudioUrl(current_url , callback){
