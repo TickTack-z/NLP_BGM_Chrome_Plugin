@@ -77,11 +77,12 @@ window.onload = function(){
             greeting: "current_state"
         },
         function(response) {
-            document.getElementById("div").textContent = response.msg;
             if (response.msg == "paused"){
+                document.getElementById("div").textContent = response.msg;
                 var element = document.getElementById("btn");
                 element.style.backgroundImage= 'url("pic/play.jpg")';
             } else if (response.msg == "playing"){
+                document.getElementById("div").textContent = localStorage.mp3;
                 var element = document.getElementById("btn");
                 element.style.backgroundImage= 'url("pic/pause.jpg")';
                 setDraw = setInterval(draw,33);
@@ -89,10 +90,26 @@ window.onload = function(){
         });
 
 
-    // your code
+    //click pause/play
     get_current_state();
     document.getElementById("btn").onclick = function(){
         switch_play_pause();
+    }
+
+    //click next
+    document.getElementById("next").onclick = function(){
+        chrome.runtime.sendMessage({
+                greeting: "next"
+            },
+        function(response) {
+            if (response.msg == "playing")
+            {
+                get_current_state();
+            }
+            else if (response.msg == "paused"){
+                switch_play_pause();
+            }
+        })
     }
 
 
@@ -104,10 +121,14 @@ window.onload = function(){
             function(response) {
                 document.getElementById("div").textContent = response.msg;
                 if (response.msg == "paused"){
+                    document.getElementById("div").textContent = "paused";
                     clearInterval(setDraw);
                     var element = document.getElementById("btn");
                     element.style.backgroundImage= 'url("pic/play.jpg")';
                 } else if (response.msg == "playing"){
+                    chrome.storage.sync.get("mp3",function (item) {
+                        document.getElementById("div").textContent = item.mp3;
+                    });
                     setDraw = setInterval(draw,33);
                     var element = document.getElementById("btn");
                     element.style.backgroundImage= 'url("pic/pause.jpg")';
@@ -121,11 +142,14 @@ window.onload = function(){
                 greeting: "current_state"
             },
             function(response) {
-                document.getElementById("div").textContent = response.msg;
                 if (response.msg == "paused"){
+                    document.getElementById("div").textContent = "paused";
                     var element = document.getElementById("btn");
                     element.style.backgroundImage= 'url("pic/play.jpg")';
                 } else{
+                    chrome.storage.sync.get("mp3",function (item) {
+                        document.getElementById("div").textContent = item.mp3;
+                    });
                     var element = document.getElementById("btn");
                     element.style.backgroundImage= 'url("pic/pause.jpg")';
                 }
@@ -134,5 +158,25 @@ window.onload = function(){
 
 
 
-};
+
+    //document.getElementById("div").innerHTML=response.src;
+    chrome.storage.onChanged.addListener(function(changes, namespace) {
+        if ("mp3" in changes)
+        {
+            document.getElementById("div").innerHTML=changes["mp3"].newValue;
+        }
+
+        for (key in changes) {
+            var storageChange = changes[key];
+            console.log('Storage key "%s" in namespace "%s" changed. ' +
+                'Old value was "%s", new value is "%s".',
+                key,
+                namespace,
+                storageChange.oldValue,
+                storageChange.newValue);
+        }
+    });
+
+
+}
 

@@ -2,10 +2,14 @@
 var successURL = 'https://www.facebook.com/connect/login_success.html';
 window.onload = function(){
     audio = document.createElement("audio");
-    audio.src =  "https://s3.amazonaws.com/12312331231231231232/Ib%E6%81%90%E6%80%96%E7%BE%8E%E6%9C%AF%E9%A6%86+-+Bad+Apple.mp3";
+    audio.src =  "https://s3.amazonaws.com/emotion-music/sadness/sadness1.mp3";
     audio.setAttribute("id","mp3");
     document.body.appendChild(audio);
-}
+
+    chrome.storage.sync.set({'mp3': reg(document.getElementById("mp3").src) }, function() {
+        // Notify that we saved.
+    });
+
 
 
 
@@ -30,7 +34,11 @@ chrome.tabs.onUpdated.addListener(onFacebookLogin);
 
 chrome.tabs.onHighlighted.addListener(function(){
     chrome.tabs.query({currentWindow: true, active: true}, function(tabs){
-        getAudioUrl(tabs[0].url, new_music);
+        var myElem = document.getElementById('mp3');
+        if (myElem.paused) {
+        } else{
+            getAudioUrl(tabs[0].url, new_music);
+        }
         }
 )}
 );
@@ -80,9 +88,10 @@ function new_music(new_music_url){
     else {
         myElem.src=new_music_url;
         myElem.play();
-
     }
-
+    chrome.storage.sync.set({'mp3': reg(document.getElementById("mp3").src) }, function() {
+        // Notify that we saved.
+    });
 }
 
 
@@ -110,6 +119,7 @@ chrome.runtime.onMessage.addListener(
             //return current state
             var myElem = document.getElementById('mp3');
             var mess_response;
+            var myElem_src = reg(myElem.src);
             if (myElem.paused){
                 mess_response='paused';
             }
@@ -117,9 +127,38 @@ chrome.runtime.onMessage.addListener(
                 mess_response='playing';
             }
             sendResponse({
-                msg: mess_response
+                msg: mess_response,
+                src: myElem_src
+            });
+        }
+        if (request.greeting == "next") {
+            //return current state
+            var myElem = document.getElementById('mp3');
+            var string_temp=myElem.src;
+            var status = myElem.paused;
+            var new_num=((parseInt(string_temp.slice(-5,-4)))%4)+1;
+            var new_str = string_temp.slice(0,-5)+ new_num.toString() + '.mp3';
+            new_music(new_str);
+            if (status){
+                mess_response='paused';
+            }
+            else{
+                mess_response='playing';
+            }
+            sendResponse({
+                msg: mess_response,
+                music: reg(new_str)
             });
         }
     });
+
+
+function reg(url){
+    const regex = /\/\/.+\/.+\/.+\/(.+).mp3/g;
+    var myArray = regex.exec(url);
+    var res=myArray[1];
+    return res;
+}};
+
 
 
