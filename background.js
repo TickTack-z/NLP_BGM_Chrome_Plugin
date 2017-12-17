@@ -10,6 +10,8 @@ window.onload = function(){
         // Notify that we saved.
     });
 
+    localStorage.log="{}";
+
 function onFacebookLogin() {
     if (!localStorage.accessToken) {
         chrome.tabs.getAllInWindow(null, function(tabs) {
@@ -20,6 +22,9 @@ function onFacebookLogin() {
                     console.log(access);
                     localStorage.accessToken = access;
                     chrome.tabs.onUpdated.removeListener(onFacebookLogin);
+
+
+
                     return;
                 }
             }
@@ -94,6 +99,21 @@ function getAudioUrl(current_url , callback){
 
 function new_music(new_music_url){
     var myElem = document.getElementById('mp3');
+    var log_temp ;
+    if (localStorage.getItem("log") != null) {
+        log_temp = JSON.parse(localStorage.log);
+        if (reg(new_music_url) in log_temp) {
+            log_temp[reg(new_music_url)]["count"] += 1
+        }
+        else {
+            log_temp[reg(new_music_url)]={};
+            log_temp[reg(new_music_url)]["count"] = 1;
+            log_temp[reg(new_music_url)]["like"] = 0;
+            log_temp[reg(new_music_url)]["next"] = 0;
+        }
+    }
+    localStorage.log = JSON.stringify(log_temp);
+
     if (myElem.paused){
         myElem.src=new_music_url;
     }
@@ -104,6 +124,7 @@ function new_music(new_music_url){
     chrome.storage.sync.set({'mp3': reg(document.getElementById("mp3").src) }, function() {
         // Notify that we saved.
     });
+
 }
 
 
@@ -147,6 +168,15 @@ chrome.runtime.onMessage.addListener(
             //return current state
             var myElem = document.getElementById('mp3');
             var string_temp=myElem.src;
+
+
+            //get log data
+            var log_temp = JSON.parse(localStorage.log);
+            if (reg(string_temp) in log_temp){
+                log_temp[reg(string_temp)]["next"] += 1;
+            }
+            localStorage.log = JSON.stringify(log_temp);
+
             var status = myElem.paused;
             var new_num=((parseInt(string_temp.slice(-5,-4)))%4)+1;
             var new_str = string_temp.slice(0,-5)+ new_num.toString() + '.mp3';

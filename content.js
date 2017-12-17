@@ -5,6 +5,7 @@ function displayUser(user) {
         localStorage.userId = user.id;
     }else{
         delete localStorage.accessToken ;
+        delete localStorage.userId;
     }
 }
 
@@ -19,9 +20,18 @@ window.onload = function(){
         var element_temp = document.getElementById("like");
         if (localStorage.getItem(item.mp3) != null) {
             element_temp.style.backgroundImage = 'url("pic/heart_liked.png")';
+
+            var log_temp = JSON.parse(localStorage.log);
+            log_temp[item.mp3]["like"] = 1;
+            localStorage.log = JSON.stringify(log_temp);
         }
         else {
             element_temp.style.backgroundImage = 'url("pic/h_wangyi.png")';
+
+
+            var log_temp = JSON.parse(localStorage.log);
+            log_temp[item.mp3]["like"] = 0;
+            localStorage.log = JSON.stringify(log_temp);
         }
     })
 
@@ -123,10 +133,21 @@ window.onload = function(){
                 if (localStorage.getItem(item.mp3) != null){
                     element.style.backgroundImage = 'url("pic/h_wangyi.png")';
                     localStorage.removeItem(item.mp3);
+
+                    var log_temp = JSON.parse(localStorage.log);
+                    log_temp[item.mp3]["like"] = 0;
+                    localStorage.log = JSON.stringify(log_temp);
+
                 }
                 else{
                     localStorage.setItem(item.mp3,1);
                     element.style.backgroundImage = 'url("pic/heart_liked.png")';
+
+
+                    var log_temp = JSON.parse(localStorage.log);
+                    log_temp[item.mp3]["like"] = 1;
+                    localStorage.log = JSON.stringify(log_temp);
+
                 }
             });
             /*
@@ -230,9 +251,19 @@ window.onload = function(){
                 element = document.getElementById("like");
                 if (localStorage.getItem(temp) != null) {
                     element.style.backgroundImage = 'url("pic/heart_liked.png")';
+
+
+                    var log_temp = JSON.parse(localStorage.log);
+                    log_temp[item.mp3]["like"] = 1;
+                    localStorage.log = JSON.stringify(log_temp);
                 }
                 else {
                     element.style.backgroundImage = 'url("pic/h_wangyi.png")';
+
+
+                    var log_temp = JSON.parse(localStorage.log);
+                    log_temp[item.mp3]["like"] = 0;
+                    localStorage.log = JSON.stringify(log_temp);
                 }
         }
         if ("emotion" in changes)
@@ -261,7 +292,7 @@ window.onload = function(){
         for (var i = 0; i < list_emotion.length; i++){
             var temp = parseFloat(emotions[list_emotion[i]]);
             ele_list[i].innerHTML = parseInt((temp*100).toString())+"%";
-            var percent = (parseInt(10*Math.sqrt(10*Math.sqrt(temp*100)))).toString()+"%";
+            var percent = (parseInt(10*Math.sqrt(temp*100))).toString()+"%";
             ele_list_value[i].setAttribute("data-percent",percent);
         }
         jQuery('.skillbar').each(function(){
