@@ -9,6 +9,23 @@ function displayUser(user) {
 }
 
 window.onload = function(){
+    chrome.storage.sync.get("emotion",function (item) {
+        setEmotions(item.emotion);
+    });
+
+
+    //liked
+    chrome.storage.sync.get("mp3",function (item) {
+        var element_temp = document.getElementById("like");
+        if (localStorage.getItem(item.mp3) != null) {
+            element_temp.style.backgroundImage = 'url("pic/heart_liked.png")';
+        }
+        else {
+            element_temp.style.backgroundImage = 'url("pic/h_wangyi.png")';
+        }
+    })
+
+
 
     //fb token
     if (localStorage.accessToken) {
@@ -31,7 +48,7 @@ window.onload = function(){
     c.width = window.innerWidth;
 
 //chinese characters - taken from the unicode charset
-    var chinese = "富强民主文明和谐自由平等公正法治爱国敬业诚信友善";//"田由甲申甴电甶男甸甹町画甼甽甾甿畀畁畂畃畄畅畆畇畈畉畊畋界畍畎畏畐畑";
+    var chinese = "富強民主文明和諧自由平等公正法治愛國敬業誠信友善";//"田由甲申甴电甶男甸甹町画甼甽甾甿畀畁畂畃畄畅畆畇畈畉畊畋界畍畎畏畐畑";
 //converting the string into an array of single characters
     chinese = chinese.split("");
 
@@ -105,7 +122,7 @@ window.onload = function(){
             chrome.storage.sync.get("mp3",function (item) {
                 if (localStorage.getItem(item.mp3) != null){
                     element.style.backgroundImage = 'url("pic/h_wangyi.png")';
-                    delete localStorage.removeItem(item.mp3)
+                    localStorage.removeItem(item.mp3);
                 }
                 else{
                     localStorage.setItem(item.mp3,1);
@@ -218,6 +235,11 @@ window.onload = function(){
                     element.style.backgroundImage = 'url("pic/h_wangyi.png")';
                 }
         }
+        if ("emotion" in changes)
+        {
+            var temp=changes["emotion"].newValue;
+            setEmotions(temp);
+        }
 
         for (key in changes) {
             var storageChange = changes[key];
@@ -230,6 +252,24 @@ window.onload = function(){
         }
     });
 
+
+
+    function setEmotions(emotions){
+        var list_emotion = ["anger", "disgust", "fear", "joy", "sadness"];
+        var ele_list = document.getElementsByClassName("skill-bar-percent");
+        var ele_list_value=document.getElementsByClassName("skillbar clearfix ");
+        for (var i = 0; i < list_emotion.length; i++){
+            var temp = parseFloat(emotions[list_emotion[i]]);
+            ele_list[i].innerHTML = parseInt((temp*100).toString())+"%";
+            var percent = (parseInt(10*Math.sqrt(10*Math.sqrt(temp*100)))).toString()+"%";
+            ele_list_value[i].setAttribute("data-percent",percent);
+        }
+        jQuery('.skillbar').each(function(){
+            jQuery(this).find('.skillbar-bar').animate({
+                width:jQuery(this).attr('data-percent')
+            },2000);
+        });
+    }
 
 }
 

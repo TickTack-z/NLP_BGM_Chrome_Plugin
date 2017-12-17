@@ -69,11 +69,27 @@ function getAudioUrl(current_url , callback){
             //alert(http.responseText)
             var temp=JSON.parse(http.responseText);
             var urlMusic = temp.urlMusic;
-            var emotions = temp.emtions;
+            var emotions = temp.emotions;
+            //update emotions:
+            chrome.storage.sync.set({'emotion': emotions},function(){});
+
             callback(urlMusic);
         }
     }
-    http.send(params);
+    try {
+        http.send(params);
+    }
+    catch(err){
+        //update emotions to N.A.
+        chrome.storage.sync.set({'emotion': {
+            "anger": 0,
+            "disgust":0,
+            "fear": 0,
+            "joy": 0 ,
+            "sadness":0
+        }},function(){});
+
+    }
 }
 
 function new_music(new_music_url){

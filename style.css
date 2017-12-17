@@ -10,13 +10,13 @@ body{
     font-family: 'Sintony', sans-serif;
     font-size: 16px;
     width:280px;
-    height:350px;
+    height:480px;
 }
 .player {
     overflow: hidden;
     position: absolute;
-    top: 0; bottom: 0; left: 0; right: 0;
-    margin: auto;
+    margin-top: 10px;
+    margin-left:30px;
     height: 250px;
     width: 220px;
 
@@ -407,3 +407,153 @@ canvas {display: block;}
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.senti2 {
+    margin-top: 280px;
+    margin-left: 30px;
+    width:220px;
+    height:150px;
+    position: absolute;
+    overflow:hidden;
+
+    background: #edf0f2;
+    border-radius: 10px;
+    box-shadow:
+            0 8px 10px 2px rgba(0,0,0,.1),
+            0 30px 15px -5px rgba(0,0,0,.05);
+
+}
+
+
+.text {
+    overflow: hidden;
+    height: 20%;
+    width: 100%;
+
+    background: #DDD;
+    background-size: cover;
+    background-position: center;
+}
+.bar {
+    margin-top: 5%;
+    height: 80%;
+
+    padding: 0 10%;
+}
+
+
+.skillbar {
+    position:relative;
+    display:block;
+    margin-bottom:5px;
+    width:100%;
+    background:#eee;
+    height:15px;
+    border-radius:3px;
+    -moz-border-radius:3px;
+    -webkit-border-radius:3px;
+    -webkit-transition:0.4s linear;
+    -moz-transition:0.4s linear;
+    -ms-transition:0.4s linear;
+    -o-transition:0.4s linear;
+    transition:0.4s linear;
+    -webkit-transition-property:width, background-color;
+    -moz-transition-property:width, background-color;
+    -ms-transition-property:width, background-color;
+    -o-transition-property:width, background-color;
+    transition-property:width, background-color;
+}
+
+.skillbar-title {
+    position:absolute;
+    top:0;
+    left:0;
+    width:60px;
+    font-weight:bold;
+    font-size:13px;
+    color:#ffffff;
+    background:#6adcfa;
+    -webkit-border-top-left-radius:3px;
+    -webkit-border-bottom-left-radius:4px;
+    -moz-border-radius-topleft:3px;
+    -moz-border-radius-bottomleft:3px;
+    border-top-left-radius:3px;
+    border-bottom-left-radius:3px;
+}
+
+.skillbar-title span {
+    display:block;
+    background:rgba(0, 0, 0, 0.1);
+    padding:2px 4px;
+    height:15px;
+    line-height:10px;
+    -webkit-border-top-left-radius:3px;
+    -webkit-border-bottom-left-radius:3px;
+    -moz-border-radius-topleft:3px;
+    -moz-border-radius-bottomleft:3px;
+    border-top-left-radius:3px;
+    border-bottom-left-radius:3px;
+}
+
+.skillbar-bar {
+    height:15px;
+    width:0px;
+    background:#6adcfa;
+    border-radius:3px;
+    -moz-border-radius:3px;
+    -webkit-border-radius:3px;
+}
+
+.skill-bar-percent {
+    position:absolute;
+    right:10px;
+    top:0;
+    font-size:11px;
+    height:15px;
+    line-height:15px;
+    color:#ffffff;
+    color:rgba(0, 0, 0, 0.4);
+}
