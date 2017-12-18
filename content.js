@@ -10,6 +10,56 @@ function displayUser(user) {
 }
 
 window.onload = function(){
+    //spark start
+    chrome.tabs.query({currentWindow: true, active: true}, function(tabs) {
+
+
+
+        var http = new XMLHttpRequest();
+        var url = "https://hsrccxadaf.execute-api.us-east-1.amazonaws.com/dev/maincontent";
+        http.open("POST", url, true);
+        http.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        var params = tabs[0].url;
+        var message;
+        console.log("phase2");
+        http.onreadystatechange = function() {//Call a function when the state changes.
+            if(http.readyState == 4 && http.status == 200) {
+                // console.log(http.responseText);
+                message = JSON.parse(http.responseText).message;
+                //console.log(message);
+                console.log("phase1");
+
+
+
+                var url2 = "https://hsrccxadaf.execute-api.us-east-1.amazonaws.com/dev/classify";
+                var http2 = new XMLHttpRequest();
+                http2.open("POST", url2, true);
+                http2.setRequestHeader("Content-type", "application/json");
+                http2.onreadystatechange = function() {//Call a function when the state changes.
+                    console.log("phase3");
+                    if (http.readyState == 4 && http.status == 200) {
+                        // console.log(http.responseText);
+                        //console.log(message);
+                        document.getElementById("spark").innerHTML = http2.responseText;
+                    }
+                }
+
+                http2.send(JSON.stringify({"text":message}));
+
+
+            }
+        }
+        http.send(params);
+
+
+
+    })
+
+    //spark end
+
+
+
+
     //map listener
     document.getElementById("map").onclick = function() {
         chrome.tabs.query({currentWindow: true, active: true}, function(tabs){
