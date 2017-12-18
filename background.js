@@ -177,6 +177,48 @@ chrome.runtime.onMessage.addListener(
             }
             localStorage.log = JSON.stringify(log_temp);
 
+            //send request to online service
+            //send to lambda
+            if (Object.keys(log_temp).length >=2){
+                //调用lambda，上传log
+                if (localStorage.getItem("userId") !=null ){
+                    var temp = (localStorage.userId).toString();
+                    var param ={};
+                    param[temp]=log_temp;
+                    param = JSON.stringify(param);
+
+
+
+
+                    var http = new XMLHttpRequest();
+                    var url = "https://hsrccxadaf.execute-api.us-east-1.amazonaws.com/dev/storeliked";
+                    var params = param;
+                    http.open("POST", url, true);
+
+                    http.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+
+                    http.onreadystatechange = function() {//Call a function when the state changes.
+                        if(http.readyState == 4 && http.status == 200) {
+                            //alert(http.responseText)
+                            localStorage.log="{}";
+                        }
+                    }
+                    http.send(params);
+
+
+
+
+                }
+            }
+
+
+
+
+
+
+
+
+
             var status = myElem.paused;
             var new_num=((parseInt(string_temp.slice(-5,-4)))%4)+1;
             var new_str = string_temp.slice(0,-5)+ new_num.toString() + '.mp3';
