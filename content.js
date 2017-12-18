@@ -12,9 +12,6 @@ function displayUser(user) {
 window.onload = function(){
     //spark start
     chrome.tabs.query({currentWindow: true, active: true}, function(tabs) {
-
-
-
         var http = new XMLHttpRequest();
         var url = "https://hsrccxadaf.execute-api.us-east-1.amazonaws.com/dev/maincontent";
         http.open("POST", url, true);
