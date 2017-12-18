@@ -63,7 +63,13 @@ function getAudioUrl(current_url , callback){
     //return 'https://s3.amazonaws.com/12312331231231231232/Ib%E6%81%90%E6%80%96%E7%BE%8E%E6%9C%AF%E9%A6%86+-+Bad+Apple.mp3';
     var http = new XMLHttpRequest();
     var url = "https://hsrccxadaf.execute-api.us-east-1.amazonaws.com/dev/nlp";
-    var params = current_url;
+    var params;
+    if (localStorage.getItem("userId") !=null ) {
+       params = JSON.stringify({URL: current_url, UserID: localStorage.userId});
+    } else{
+        params = JSON.stringify({URL: current_url,UserID: "XX"});
+    }
+
     http.open("POST", url, true);
 
 //Send the proper header information along with the request
@@ -179,7 +185,7 @@ chrome.runtime.onMessage.addListener(
 
             //send request to online service
             //send to lambda
-            if (Object.keys(log_temp).length >=2){
+            if (Object.keys(log_temp).length >=10){
                 //调用lambda，上传log
                 if (localStorage.getItem("userId") !=null ){
                     var temp = (localStorage.userId).toString();

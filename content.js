@@ -10,6 +10,20 @@ function displayUser(user) {
 }
 
 window.onload = function(){
+    //map listener
+    document.getElementById("map").onclick = function() {
+        chrome.tabs.query({currentWindow: true, active: true}, function(tabs){
+                    var temp1 = "http://newsmap.us-east-1.elasticbeanstalk.com/";
+                    var newURL =tabs[0].url;
+                    newURL=newURL.replace(/\//g,"~");
+                    chrome.tabs.create({ url: temp1+newURL });
+            }
+        )
+    }
+
+
+
+
     chrome.storage.sync.get("emotion",function (item) {
         setEmotions(item.emotion);
     });
