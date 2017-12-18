@@ -2,7 +2,7 @@
 var successURL = 'https://www.facebook.com/connect/login_success.html';
 window.onload = function(){
     audio = document.createElement("audio");
-    audio.src =  "https://s3.amazonaws.com/emotion-music/sadness/sadness1.mp3";
+    audio.src =  "https://s3.amazonaws.com/emotion-music/sadness/joy1.mp3";
     audio.setAttribute("id","mp3");
     document.body.appendChild(audio);
 
