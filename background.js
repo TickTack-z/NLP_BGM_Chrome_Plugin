@@ -22,9 +22,6 @@ function onFacebookLogin() {
                     console.log(access);
                     localStorage.accessToken = access;
                     chrome.tabs.onUpdated.removeListener(onFacebookLogin);
-
-
-
                     return;
                 }
             }
