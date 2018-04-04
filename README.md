@@ -12,3 +12,4 @@ Get correlation between sentiment and music from Twitter stream to support recom
  
 Plz check for working items: https://coms6998.worktile.com/tasks/
 
+![alt text](https://github.com/TickTack-z/NLP_BGM_Chrome_Plugin/blob/master/extension.jpg)
